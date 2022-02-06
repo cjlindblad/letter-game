@@ -15,8 +15,7 @@ def main():
     font = pygame.font.SysFont(None, SCREEN_HEIGHT)
     
     # read image files
-    image_data = list(map(lambda f: (os.path.basename(f)[0], f), glob.glob(os.path.join("images", "*.jpg"))))
-    print(image_data)
+    image_data = list(map(lambda f: (os.path.basename(f)[0].lower(), f), glob.glob(os.path.join("images", "*.jpg"))))
 
     # game state
     running = True
@@ -43,6 +42,7 @@ def main():
                     running = False
 
         text = font.render(current_letter.upper(), True, (127, 222, 234))
+        text.set_alpha(235)
         text_rect = text.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
         screen.blit(text, text_rect)
         pygame.display.flip()

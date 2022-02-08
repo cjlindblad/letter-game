@@ -1,5 +1,6 @@
 import glob
 import os
+import random
 import pygame
 
 def main():
@@ -15,27 +16,27 @@ def main():
     font = pygame.font.SysFont(None, SCREEN_HEIGHT)
     
     # read image files
-    image_data = list(map(lambda f: (os.path.basename(f)[0].lower(), f), glob.glob(os.path.join("images", "*.jpg"))))
+    image_file_names = glob.glob(os.path.join("images", "*.jpg"))
 
     # game state
     running = True
-    letters = [name for (name, _) in image_data]
-    images = [pygame.transform.scale(pygame.image.load(image_path), (SCREEN_WIDTH, SCREEN_HEIGHT)) for (_, image_path) in image_data]
+    letters = [os.path.basename(file_name)[0].lower() for file_name in image_file_names]
+    images = [pygame.transform.scale(pygame.image.load(file_name), (SCREEN_WIDTH, SCREEN_HEIGHT)) for file_name in image_file_names]
+    image_data = list(zip(letters, images))
+    random.shuffle(image_data)
+
     current_letter_index = 0
 
     # main loop
     while running:
-        current_letter = letters[current_letter_index % len(letters)]
-        current_image = images[current_letter_index % len(letters)]
+        current_letter, current_image = image_data[current_letter_index % len(image_data)]
 
         screen.fill((255, 255, 255))
         screen.blit(current_image, (0, 0))
 
         # event handling, gets all events from the event queue
         for event in pygame.event.get():
-            # only do something if the event is of type QUIT
             if event.type == pygame.KEYDOWN:
-                # change the value to False, to exit the main loop
                 if event.key == ord(current_letter):
                     current_letter_index += 1
                 if event.key == pygame.K_c and pygame.key.get_mods() & pygame.KMOD_CTRL:

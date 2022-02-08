@@ -1,9 +1,14 @@
 import glob
 import os
 import random
+import argparse
 import pygame
 
 def main():
+    # read cli arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--fps', help='Show FPS counter.', action='store_const', const=True)
+    args = parser.parse_args()
 
     # initialize the pygame module
     pygame.init()
@@ -27,6 +32,9 @@ def main():
 
     current_letter_index = 0
 
+    clock = pygame.time.Clock()
+    fps_font = pygame.font.SysFont(None, int(SCREEN_HEIGHT / 20))
+
     # main loop
     while running:
         current_letter, current_image = image_data[current_letter_index % len(image_data)]
@@ -46,6 +54,12 @@ def main():
         text.set_alpha(235)
         text_rect = text.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
         screen.blit(text, text_rect)
+
+        clock.tick(60)
+        if (args.fps):
+            fps_text = fps_font.render(str(clock.get_fps()), True, (0, 255, 0))
+            screen.blit(fps_text, (10, 10))
+
         pygame.display.flip()
 
 if __name__ == "__main__":

@@ -35,12 +35,13 @@ def main():
     clock = pygame.time.Clock()
     fps_font = pygame.font.SysFont(None, int(SCREEN_HEIGHT / 20))
 
+    rendered_letter = None
+
+    screen.fill((255, 255, 255))
+
     # main loop
     while running:
         current_letter, current_image = image_data[current_letter_index % len(image_data)]
-
-        screen.fill((255, 255, 255))
-        screen.blit(current_image, (0, 0))
 
         # event handling, gets all events from the event queue
         for event in pygame.event.get():
@@ -50,15 +51,22 @@ def main():
                 if event.key == pygame.K_c and pygame.key.get_mods() & pygame.KMOD_CTRL:
                     running = False
 
-        text = font.render(current_letter.upper(), True, (127, 222, 234))
-        text.set_alpha(235)
-        text_rect = text.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
-        screen.blit(text, text_rect)
+        if rendered_letter != current_letter:
+            screen.blit(current_image, (0, 0))
+            text = font.render(current_letter.upper(), True, (127, 222, 234))
+            text.set_alpha(235)
+            text_rect = text.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
+            screen.blit(text, text_rect)
+
+        rendered_letter = current_letter
 
         clock.tick(60)
         if (args.fps):
-            fps_text = fps_font.render(str(clock.get_fps()), True, (0, 255, 0))
-            screen.blit(fps_text, (10, 10))
+            fps_text = fps_font.render(str(int(clock.get_fps())), True, (0, 255, 0))
+            fps_surface = pygame.Surface(fps_text.get_size())
+            fps_surface.fill((100, 100, 100))
+            fps_surface.blit(fps_text, (0, 0))
+            screen.blit(fps_surface, (10, 10))
 
         pygame.display.flip()
 

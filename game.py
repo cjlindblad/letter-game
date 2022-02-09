@@ -62,7 +62,7 @@ def main():
         if rendered_letter != current_letter:
             screen.blit(current_image, (0, 0))
             text = font.render(current_letter.upper(), True, (127, 222, 234))
-            text.set_alpha(235)
+            text.set_alpha(225)
             text_rect = text.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
             screen.blit(text, text_rect)
 

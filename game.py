@@ -23,6 +23,11 @@ def main():
     # read image files
     image_file_names = glob.glob(os.path.join("images", "*.jpg"))
 
+    # init audio
+    pygame.mixer.init()
+    success_sound = pygame.mixer.Sound(os.path.join("audio", "success.ogg"))
+    error_sound = pygame.mixer.Sound(os.path.join("audio", "error.ogg"))
+
     # game state
     running = True
     letters = [os.path.basename(file_name)[0].lower() for file_name in image_file_names]
@@ -48,6 +53,9 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == ord(current_letter):
                     current_letter_index += 1
+                    success_sound.play()
+                else:
+                    error_sound.play()
                 if event.key == pygame.K_c and pygame.key.get_mods() & pygame.KMOD_CTRL:
                     running = False
 
